@@ -1,4 +1,4 @@
-FROM node:16-alpine as build
+FROM node:16-alpine as builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --no-audit --no-fund
@@ -9,11 +9,10 @@ RUN npm run build \
 
 FROM node:16-alpine as backend
 WORKDIR /app
-COPY --from=build /app/package*.json ./
-RUN npm ci --no-audit --no-fund --omit=dev \
-    && npm i pm2 --no-audit --no-fund -g \
-    && npm i @nestjs/config
-COPY --from=builder /app/dist ./dist/
-COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
+COPY --from=builder /app/package*.json ./
+RUN npm ci --omit=dev --no-audit --no-fund \
+    && npm i pm2 -g
+COPY --from=builder /app/dist ./dist
+COPY ./ecosystem.config.js ./
 EXPOSE 4000
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]
