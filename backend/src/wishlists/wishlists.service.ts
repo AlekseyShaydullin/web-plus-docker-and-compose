@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
@@ -40,7 +44,7 @@ export class WishlistsService {
     });
 
     if (!wishLists) {
-      throw new BadRequestException('Коллекция подарков не найдена не найден');
+      throw new BadRequestException('Коллекция подарков не найдена');
     }
 
     return wishLists;
@@ -66,6 +70,10 @@ export class WishlistsService {
   ): Promise<Wishlist> {
     const wishList = await this.findOne(id);
 
+    if (!wishList) {
+      throw new NotFoundException('Не найдена подборка подарков');
+    }
+
     if (wishList.owner.id !== userId) {
       throw new BadRequestException(
         'Вы не можете изменить Вишлист других людей',
@@ -86,6 +94,10 @@ export class WishlistsService {
 
   async remove(id: number, userId: number): Promise<Wishlist> {
     const wishList = await this.findOne(id);
+
+    if (!wishList) {
+      throw new NotFoundException('Не найдена подборка подарков');
+    }
 
     if (wishList.owner.id !== userId) {
       throw new BadRequestException(
