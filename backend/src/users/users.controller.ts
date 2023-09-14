@@ -27,29 +27,29 @@ export class UsersController {
   @Get('me')
   findMe(
     @Request()
-    { user }: TUserRequest,
+    req: TUserRequest,
   ): Promise<User> {
-    return this.usersService.findOneById(user.id);
+    return this.usersService.findOneById(req.user.id);
   }
 
   // PATCH/users/me
   @Patch('me')
   update(
     @Request()
-    { user }: TUserRequest,
+    req: TUserRequest,
     @Body()
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.updateById(user.id, updateUserDto);
+    return this.usersService.updateById(req.user.id, updateUserDto);
   }
 
   // GET/users/me/wishes
   @Get('me/wishes')
   async findMyWishes(
     @Request()
-    { user }: TUserRequest,
+    req: TUserRequest,
   ): Promise<Wish[]> {
-    const wishes = await this.usersService.findUserWishes(user.username);
+    const wishes = await this.usersService.findUserWishes(req.user.username);
     if (!wishes) throw new NotFoundException(`У пользователя нет пожеланий`);
     return wishes;
   }

@@ -22,11 +22,11 @@ export class OffersController {
   @Post()
   create(
     @Request()
-    { user }: TUserRequest,
+    req: TUserRequest,
     @Body()
     createOfferDto: CreateOfferDto,
   ): Promise<Offer> {
-    return this.offersService.createOffer(createOfferDto, user.id);
+    return this.offersService.createOffer(createOfferDto, req.user.id);
   }
 
   // GET/offers
