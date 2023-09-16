@@ -27,14 +27,14 @@ export class WishlistsController {
   @Post()
   async create(
     @Request()
-    req: TUserRequest,
+    { user }: TUserRequest,
     @Body()
     createWishlistDto: CreateWishlistDto,
   ): Promise<Wishlist> {
     try {
       return await this.wishlistsService.createWishlist(
         createWishlistDto,
-        req.user.id,
+        user.id,
       );
     } catch (error) {
       console.log(error);
@@ -70,23 +70,23 @@ export class WishlistsController {
   @Patch(':id')
   update(
     @Request()
-    req: TUserRequest,
+    { user }: TUserRequest,
     @Param('id')
     id: number,
     @Body()
     updateWishlistDto: UpdateWishlistDto,
   ): Promise<Wishlist> {
-    return this.wishlistsService.update(id, updateWishlistDto, req.user.id);
+    return this.wishlistsService.update(id, updateWishlistDto, user.id);
   }
 
   // DELETE/wishlists/{id}
   @Delete(':id')
   remove(
     @Request()
-    req: TUserRequest,
+    { user }: TUserRequest,
     @Param('id')
     id: number,
   ): Promise<Wishlist> {
-    return this.wishlistsService.remove(id, req.user.id);
+    return this.wishlistsService.remove(id, user.id);
   }
 }

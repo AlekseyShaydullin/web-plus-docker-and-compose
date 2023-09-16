@@ -26,11 +26,11 @@ export class WishesController {
   @Post()
   async createWish(
     @Request()
-    req: TUserRequest,
+    { user }: TUserRequest,
     @Body()
     createWishDto: CreateWishDto,
   ): Promise<Wish> {
-    return await this.wishesService.create(createWishDto, req.user.id);
+    return await this.wishesService.create(createWishDto, user.id);
   }
 
   // GET/wishes/last
@@ -66,13 +66,13 @@ export class WishesController {
   @Patch(':id')
   updateWish(
     @Request()
-    req: TUserRequest,
+    { user }: TUserRequest,
     @Param('id')
     id: number,
     @Body()
     updateWishDto: UpdateWishDto,
   ): Promise<Wish> {
-    return this.wishesService.updateWish(id, updateWishDto, req.user.id);
+    return this.wishesService.updateWish(id, updateWishDto, user.id);
   }
 
   // DELETE/wishes/{id}
@@ -80,20 +80,20 @@ export class WishesController {
   @Delete(':id')
   removeWish(
     @Request()
-    req: TUserRequest,
+    { user }: TUserRequest,
     @Param('id')
     id: number,
   ): Promise<Wish> {
-    return this.wishesService.removeWish(id, req.user.id);
+    return this.wishesService.removeWish(id, user.id);
   }
 
   // POST/wishes/{id}/copy
   @UseGuards(JwtAuthGuard)
   @Post(':id/copy')
   copyWish(
-    @Request() req: TUserRequest,
+    @Request() { user }: TUserRequest,
     @Param('id') id: number,
   ): Promise<Wish> {
-    return this.wishesService.copyWish(id, req.user.id);
+    return this.wishesService.copyWish(id, user.id);
   }
 }

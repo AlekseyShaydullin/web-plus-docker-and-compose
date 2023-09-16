@@ -3,7 +3,6 @@ import { IsDecimal, IsNumber, IsUrl, Length } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
 import { BaseEntity } from '../../base-entity/base.entity';
 import { Offer } from '../../offers/entities/offer.entity';
-import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 
 @Entity()
 export class Wish extends BaseEntity {
@@ -59,7 +58,4 @@ export class Wish extends BaseEntity {
   })
   @IsDecimal()
   copied: number;
-
-  @ManyToOne(() => Wishlist, (wishList) => wishList.items)
-  wishList: Wishlist;
 }
